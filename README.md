@@ -1,4 +1,4 @@
-2025/06/02
+# 2025/06/02
 创建新项目，并使用.ignore插件创建.gitignore文件来忽视不必要传入github的文件；
 创建ACM模板，后续会基于这些模板来定制生成。
 
@@ -23,3 +23,16 @@ FreeMarker的使用可分三步：1、引入版本号+要操作的文件地址+�
 这里注意：在动态文件生成器类中，引入了import lombok.Data包，这样不用写set方法。
 Lombok注解代码生成工具：通过添加注解的方式，不需要为类编写getter或eques方法，同时可以自动化日志变量。@Data 注解在类，生成setter/getter、equals、canEqual、hashCode、toString方法，如为final属性，则不会为该属性生成setter方法。
 经过不太完全的实验：FreeMarker获取参数是通过getter来实现的，并且对于boolean类型的值，isPool()或getPool()两种方法名均能识别。
+
+2025/06/09
+命令行开发。使用picocli包。
+命令模式：将操作进行封装，每个操作都是一个独立的命令类，所以新增命令操作时不需要改动现有代码。【将操作抽象，很关键，减少代码改动】
+抽象命令：命令(父类/接口),具体命令(子类，具体实现类，负责执行具体操作)
+学习命令模式开发：https://github.com/liyupi/yuindex
+【BUG】
+① MainTemplate.java.ftl报错变量名为空。
+    在GenerateCommand中的变量名要和MainGenerator中的变量名要对应起来。
+② 关于jar打包：
+    在code_generator_basic中对项目打包，该jar包在code_generator_basic中的target目录下，运行该jar包会报找不到文件路径。
+    解决办法：只有将jar包拖到code_generator_basic目录下才能正确运行。(笨办法)
+    
