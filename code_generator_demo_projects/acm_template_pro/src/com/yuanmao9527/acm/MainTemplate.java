@@ -1,29 +1,31 @@
 import java.util.Scanner;
 
 /**
- * ACM ÊäÈëÄ£°å£¨¶àÊıÖ®ºÍ£©
- * @author: yuan
+ * ACM è¾“å…¥æ¨¡æ¿ï¼ˆå¤šæ•°ä¹‹å’Œï¼‰
  */
 public class MainTemplate {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-            // ¶ÁÈ¡ÊäÈëÔªËØ¸öÊı
+
+        while (scanner.hasNext()) {
+            // è¯»å–è¾“å…¥å…ƒç´ ä¸ªæ•°
             int n = scanner.nextInt();
 
-            // ¶ÁÈ¡Êı×é
+            // è¯»å–æ•°ç»„
             int[] arr = new int[n];
             for (int i = 0; i < n; i++) {
                 arr[i] = scanner.nextInt();
             }
 
-            // ´¦ÀíÎÊÌâÂß¼­£¬¸ù¾İĞèÒª½øĞĞÊä³ö
-            // Ê¾Àı£º¼ÆËãÊı×éÔªËØµÄºÍ
+            // å¤„ç†é—®é¢˜é€»è¾‘ï¼Œæ ¹æ®éœ€è¦è¿›è¡Œè¾“å‡º
+            // ç¤ºä¾‹ï¼šè®¡ç®—æ•°ç»„å…ƒç´ çš„å’Œ
             int sum = 0;
             for (int num : arr) {
                 sum += num;
             }
 
-            System.out.println("Êä³ö½á¹ûÎª£º" + sum);
+            System.out.println("Sum: " + sum);
+        }
 
         scanner.close();
     }

@@ -1,0 +1,65 @@
+{
+  "name": "acm-template-pro-generator",
+  "description": "ACM 示例模板生成器",
+  "basePackage": "code.yuanmao9527",
+  "version": "1.0",
+  "author": "yuanmao9527",
+  "createTime": "2025-06-17",
+  "fileConfig": {
+    "inputRootPath": ".source/acm-template-pro",
+    "outputRootPath": "generated",
+    "sourceRootPath": "D:/Study/programmes/code_generator/code_generator_demo_projects/acm_template_pro",
+    "type": "dir",
+    "files": [
+      {
+        "inputPath": "src/com/yuanmao9527/acm/MainTemplate.java.ftl",
+        "outputPath": "src/com/yuanmao9527/acm/MainTemplate.java",
+        "type": "file",
+        "generateType": "dynamic"
+      },
+      {
+        "inputPath": "_gitignore",
+        "outputPath": "_gitignore",
+        "type": "file",
+        "generateType": "static"
+      },
+      {
+        "inputPath": "README.md",
+        "outputPath": "README.md",
+        "type": "file",
+        "generateType": "static"
+      }
+    ]
+  },
+  "modelConfig": {
+    "models": [
+      {
+        "fieldName": "needGit",
+        "type": "boolean",
+        "description": "是否生成.gitignore文件",
+        "defaultValue": true
+      },
+      {
+        "fieldName": "loop",
+        "type": "boolean",
+        "description": "是否生成循环",
+        "defaultValue": false,
+        "abbr": "l"
+      },
+      {
+        "fieldName": "author",
+        "type": "String",
+        "description": "作者注释",
+        "defaultValue": "yuanmao",
+        "abbr": "a"
+      },
+      {
+        "fieldName": "outputText",
+        "type": "String",
+        "description": "输出信息",
+        "defaultValue": "sum = ",
+        "abbr": "o"
+      }
+    ]
+  }
+}

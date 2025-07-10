@@ -1,17 +1,15 @@
-package com.yuanmao9527.generator;
+package com.yuanmao9527.maker.generator.file;
 
-import com.yuanmao9527.models.MainTemplateConfig;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
+import com.yuanmao9527.maker.models.DataModel;
 import freemarker.template.TemplateException;
 
 import java.io.File;
 import java.io.IOException;
 //代码生成器
-public class MainGenerator {
+public class FileGenerator {
     public static void main(String[] args) throws IOException, TemplateException {
         // 创建数据模型
-        MainTemplateConfig config = new MainTemplateConfig();
+        DataModel config = new DataModel();
         config.setAuthor("yuanMao9527");
         config.setLoop(false);
         config.setOutputText("多数之和是");
@@ -29,8 +27,8 @@ public class MainGenerator {
 
         /*生成静态文件*/
         // 静态文件启动器
-        StaticGenerator staticGenerator = new StaticGenerator();
-        staticGenerator.copyFilesByRecursive(inputPath,outputPath);
+        StaticFileGenerator staticGenerator = new StaticFileGenerator();
+        staticGenerator.copyFilesByHutool(inputPath,outputPath);
 
         /*生成动态文件*/
         // 获取整个项目的根目录

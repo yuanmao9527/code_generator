@@ -29,10 +29,97 @@ Lombok注解代码生成工具：通过添加注解的方式，不需要为类�
 命令模式：将操作进行封装，每个操作都是一个独立的命令类，所以新增命令操作时不需要改动现有代码。【将操作抽象，很关键，减少代码改动】
 抽象命令：命令(父类/接口),具体命令(子类，具体实现类，负责执行具体操作)
 学习命令模式开发：https://github.com/liyupi/yuindex
+【java反射机制】
 【BUG】
 ① MainTemplate.java.ftl报错变量名为空。
     在GenerateCommand中的变量名要和MainGenerator中的变量名要对应起来。
 ② 关于jar打包：
     在code_generator_basic中对项目打包，该jar包在code_generator_basic中的target目录下，运行该jar包会报找不到文件路径。
     解决办法：只有将jar包拖到code_generator_basic目录下才能正确运行。(笨办法)
+
+2025/06/15
+开发代码生成器 制作工具。
+明确需求和业务
+    目标：实现本地的代码生成器的制作工具。(能够将一个项目制作为可以动态定制部分内容的代码生成器)
+    实现的效果：开发人员可直接使用该制作工具生成模板文件(FTL)、数据模型(配置文件)、代码生成器jar包(包含动静Generator、制作jar包)。
+    实现思路
+        1、工具要实现什么功能？ 并如何提高效率？
+        2、如何自动生成模板文件以及相应的配置文件？ 如何在源文件中提取参数？【这一步是最复杂的，所以在实现之前，均是假设已有一套现成的模板文件，也已经知道哪些参数需要填充】
+        3、如何自动生成命令行？
+        4、如何动态生成jar包？
+    需求拆解
+        1、开发基础代码生成器制作工具；移除第一阶段中的硬编码，通过读取预设的配置文件自动制作代码生成器的可执行文件(jar文件)。
+
+        2、配置文件增强。以快速制作Springboot初始化模板项目生成器为目标，增加更多参数。
+
+        3、模板制作工具。自动生成配置文件和FTL动态模板文件。
+
+2025/06/16
+2025/06/17
+开发基础代码生成器制作工具，移除硬编码。
+
+1、重新构建新项目：code_generator_maker，进行代码和目录结构优化。
+2、构建元信息json文件与相对应的类。
+    使用GsonFormatPlus插件将JSON文件转为Java类代码。在Meta.class中按快捷键【Alte + Shift + Insert 打开配置菜单】
+    Files => FileInfo、Models => ModelInfo、ModelInfo.defaultValue 类型改为Obejct.
+将Json内容填充到实体对象。
+    步骤：先读取元信息文件，使用Hutool的JSONUtil.toBean方法，将JSON字符串转为对象。
+    为了每次获取meta对象时避免重复创建对象，使用一种【单例模式】，保证项目运行期间只有一个meta对象被创建，并且能轻松获取。
+    【关于volatile关键字】
+        java中内存模型：是基于CPU的缓存模型来建立的。分为两个概念，一个是线程的工作内存(相当于CPU的高速缓存)，一个是主内存。还定义了一些操作，read load use assign store write
+        线程0读取主内存中普通变量，是只读一次还是多次？
+            对于普通变量，线程在第一次读取时从主内存中获取值，之后会缓存在工作内存中，后续可直接从工作内存中获取，不会自动刷新主内存的最新值。
+        线程0读取有volatile的变量是如何读的？
+            对于volatile变量，每次读取都直接会从主内存获取最新值，不会缓存到工作内存。
+        volatile保证线程有序性。
+        【详细讲解volatile关键字以及并发编程】：https://juejin.cn/post/7070091066044579876
+
+3、动态生成数据模型文件(即自定义命令类DataModel)。
+    先定义ftl文件，
+    modelInfo.defaultValue?c将任何类型的变量(String或boolean)都转为字符串。
+4、动态生成Picocli命令类。
+5、动态生成代码生成文件
+6、程序构建jar包
+2025/06/21
+    下载完成maven包后，运行构建jar包main，出现错误((in directory "D:\Study\programmes\code_generator\code_generator_maker\generated\acm-template-pro-generator\pom.xml"): CreateProcess error=2, 系统找不到指定的文件。)
+    ，但转天重新打开电脑后又可运行。
+7、程序封装脚本
+2025/07/05
+    类似错误：[ERROR] /D:/Study/programmes/code_generator/code_generator_maker/generated/acm-template-pro-generator/src/main/java/code/generator/model/DataModel.java:[14,25] ��Ҫ';'
+    原因：DataModel.java.ftl文件中，变量赋值写成 == 
+【注意】
+    写ftl文件时，要注意变量最后的分号不要遗漏；
+    注意包的路径要与新生成的包中路径为准；
+    注意变量名书写，如：outputPath写为ouputPath；
+    注意@option中属性名要写全，如漏写description = ；
+8、测试验证
+【注意】
+Exception in thread "main" cn.hutool.core.io.IORuntimeException: File not exist: D:\Study\programmes\code_generator\code_generator_demo_projects\acm_template_pro\.gitignore
+对应文件夹中是_gitignore文件而不是.gitignore
+
+2025/07/07
+制作工具优化
+1、可移植性优化:增加.source模板文件夹，取消硬编码，
+2、功能性优化:增加项目解释文件.md；制作精简代码生成器(复制了代码生成器一些必要文件)
+3、健壮性优化: 1、规则梳理；2、自定义异常类；3、编写校验类；4、圈复杂度优化(两个操作，反转if(Alt + Enter)；提取成新方法(Refactor->Extract Method))
+4、可扩展性：
+    1、枚举值定义：什么是枚举值？为什么这么定义？代码是什么意思?(在meta.enumss)
+    枚举是一种编程语言特性，它允许开发者定义一组命名的 常量值 ，使代码更易读和维护。
+    2、模板方法模式：模板(父类)、实现模板类(子类)
+    其中protected关键字？一个类中某方法使用这个关键字代表：1、同包中可以调用，子类也可以调用；2、背后意思：普通用户不用继承这个类，则使用不到专业功能；
+专业用户可以继承这个类，获得对专业功能的使用权。3、实践表明，使用private修饰变量才是更安全的。应为可以设置getter和setter，在这两个方法中使用不同关键字达到不同效果。
+
+2025/07/10
+配置增强
+
+
+
+
+
+
+
+
+
+
+
     
