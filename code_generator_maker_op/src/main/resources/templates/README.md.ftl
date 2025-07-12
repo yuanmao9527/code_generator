@@ -18,6 +18,8 @@
 ## 参数说明
 
 <#list modelConfig.models as modelInfo>
+<#if modelInfo.groupKey??>
+<#else>
 ${modelInfo?index + 1}) ${modelInfo.fieldName}
 
 <#if modelInfo.type??>类型: ${modelInfo.type}</#if>
@@ -27,5 +29,6 @@ ${modelInfo?index + 1}) ${modelInfo.fieldName}
 <#if modelInfo.defaultValue??>默认值: ${modelInfo.defaultValue?c}</#if>
 
 <#if modelInfo.abbr??>缩写: -${modelInfo.abbr}</#if>
+</#if>
 
 </#list>

@@ -11,6 +11,7 @@ import com.yuanmao9527.maker.meta.enums.ModelTypeEnum;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 元信息校验 与 填充默认值
@@ -37,6 +38,18 @@ public class MetaValidator {
         List<Meta.ModelConfig.ModelInfo> modelInfoList = modelConfig.getModels();
         if (CollectionUtil.isNotEmpty(modelInfoList)) {
             for (Meta.ModelConfig.ModelInfo modelInfo : modelInfoList) {
+//                System.out.println(modelInfo.toString());
+                // 为 group，不校验
+                String groupKey = modelInfo.getGroupKey();
+                if (StrUtil.isNotEmpty(groupKey)) {
+                    // 生成中间参数
+                    List<Meta.ModelConfig.ModelInfo> subModelInfoList = modelInfo.getModels();
+                    String allArgsStr = modelInfo.getModels().stream()
+                            .map(subModelInfo -> String.format("\"--%s\"", subModelInfo.getFieldName()))
+                            .collect(Collectors.joining(", "));
+                    modelInfo.setAllArgsStr(allArgsStr);
+                    continue;
+                }
                 // 输出路径默认值
                 String fieldName = modelInfo.getFieldName();
                 if (StrUtil.isBlank(fieldName)) {
@@ -83,19 +96,22 @@ public class MetaValidator {
         List<Meta.FileConfig.FileInfo> fileInfoList = fileConfig.getFiles();
         if (CollectionUtil.isNotEmpty(fileInfoList)) {
             for (Meta.FileConfig.FileInfo fileInfo : fileInfoList) {
+                // type：默认 inputPath 有文件后缀（如 .java）为 file，否则为 dir
+                String type = fileInfo.getType();
+                if(FileTypeEnum.GROUP.getValue().equals(type)){ // group不填写文件输入输出路径
+                    continue;
+                }
                 // inputPath: 必填
                 String inputPath = fileInfo.getInputPath();
                 if (StrUtil.isBlank(inputPath)) {
                     throw new MetaException("未填写 inputPath");
                 }
-
                 // outputPath: 默认等于 inputPath
                 String outputPath = fileInfo.getOutputPath();
                 if (StrUtil.isEmpty(outputPath)) {
                     fileInfo.setOutputPath(inputPath);
                 }
-                // type：默认 inputPath 有文件后缀（如 .java）为 file，否则为 dir
-                String type = fileInfo.getType();
+
                 if (StrUtil.isBlank(type)) {
                     // 无文件后缀
                     if (StrUtil.isBlank(FileUtil.getSuffix(inputPath))) {

@@ -6,7 +6,7 @@
   "author": "yuanmao9527",
   "createTime": "2025-06-17",
   "fileConfig": {
-    "inputRootPath": ".source/acm-template-pro",
+    "inputRootPath": ".source/acm_template_pro",
     "outputRootPath": "generated",
     "sourceRootPath": "D:/Study/programmes/code_generator/code_generator_demo_projects/acm_template_pro",
     "type": "dir",
@@ -18,16 +18,24 @@
         "generateType": "dynamic"
       },
       {
-        "inputPath": "_gitignore",
-        "outputPath": "_gitignore",
-        "type": "file",
-        "generateType": "static"
-      },
-      {
-        "inputPath": "README.md",
-        "outputPath": "README.md",
-        "type": "file",
-        "generateType": "static"
+        "groupKey": "git",
+        "groupName": "开源",
+        "type": "group",
+        "condition": "needGit",
+        "files": [
+          {
+            "inputPath": "_gitignore",
+            "outputPath": "_gitignore",
+            "type": "file",
+            "generateType": "static"
+          },
+          {
+            "inputPath": "README.md",
+            "outputPath": "README.md",
+            "type": "file",
+            "generateType": "static"
+          }
+        ]
       }
     ]
   },
@@ -37,7 +45,7 @@
         "fieldName": "needGit",
         "type": "boolean",
         "description": "是否生成.gitignore文件",
-        "defaultValue": true
+        "defaultValue": false
       },
       {
         "fieldName": "loop",
@@ -47,18 +55,27 @@
         "abbr": "l"
       },
       {
-        "fieldName": "author",
-        "type": "String",
-        "description": "作者注释",
-        "defaultValue": "yuanmao",
-        "abbr": "a"
-      },
-      {
-        "fieldName": "outputText",
-        "type": "String",
-        "description": "输出信息",
-        "defaultValue": "sum = ",
-        "abbr": "o"
+        "groupKey": "mainTemplate",
+        "groupName": "核心模板",
+        "type": "MainTemplate",
+        "description": "用于生成核心模板文件",
+        "condition": "loop",
+        "models": [
+          {
+            "fieldName": "author",
+            "type": "String",
+            "description": "作者注释",
+            "defaultValue": "yuanmao",
+            "abbr": "a"
+          },
+          {
+            "fieldName": "outputText",
+            "type": "String",
+            "description": "输出信息",
+            "defaultValue": "sum = ",
+            "abbr": "o"
+          }
+        ]
       }
     ]
   }

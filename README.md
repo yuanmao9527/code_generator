@@ -103,17 +103,33 @@ Exception in thread "main" cn.hutool.core.io.IORuntimeException: File not exist:
 2、功能性优化:增加项目解释文件.md；制作精简代码生成器(复制了代码生成器一些必要文件)
 3、健壮性优化: 1、规则梳理；2、自定义异常类；3、编写校验类；4、圈复杂度优化(两个操作，反转if(Alt + Enter)；提取成新方法(Refactor->Extract Method))
 4、可扩展性：
-    1、枚举值定义：什么是枚举值？为什么这么定义？代码是什么意思?(在meta.enumss)
+    1、【枚举值定义】：什么是枚举值？为什么这么定义？代码是什么意思?(在meta.enumss)
     枚举是一种编程语言特性，它允许开发者定义一组命名的 常量值 ，使代码更易读和维护。
-    2、模板方法模式：模板(父类)、实现模板类(子类)
-    其中protected关键字？一个类中某方法使用这个关键字代表：1、同包中可以调用，子类也可以调用；2、背后意思：普通用户不用继承这个类，则使用不到专业功能；
+    2、【模板方法模式】：模板(父类)、实现模板类(子类)
+    其中【protected关键字】？一个类中某方法使用这个关键字代表：1、同包中可以调用，子类也可以调用；2、背后意思：普通用户不用继承这个类，则使用不到专业功能；
 专业用户可以继承这个类，获得对专业功能的使用权。3、实践表明，使用private修饰变量才是更安全的。应为可以设置getter和setter，在这两个方法中使用不同关键字达到不同效果。
 
 2025/07/10
 配置增强
-
-
-
+实现原则：
+    配置文件中，fileConfig应专注与文件生成相关的逻辑。
+    配置文件中，modelConfig应专注于数据模型的定义。只是定义有某个参数，但具体作用是什么不放在modelConfig中来控制。
+1、参数控制文件生成(needGit控制.gitignore文件生成)
+    modelConfig.models下新增needGit(boolean类型)，控制.gitignore是否生成。
+    fileConfig.files下的_gitignore加入condition，在ftl文件中作为判断条件。
+    (发现GenerateCommand.java.ftl中option里names一个判断条件也写作addr，造成后续出错，随记录)
+2、同参数控制多个文件生成
+    先判断有无groupKey(fileConfig.files)
+        判断有无condition(groupKey组中的condition)
+    判断有无conditiong(fileConfig.files)
+    注意：拼写错误</#if>不是<#/if>
+【FreeMarker的宏定义】
+3、同参数控制代码和文件生成(2中已经实现)
+4、定义一组相关的参数
+    目的：为避免配置之间可能会有名称冲突。对参数进行分组，各组下参数互相隔离，避免命名冲突。
+5、定义可选开启参数组
+    目的：用户输入的某个开关参数，来控制是否要让用户输入其他的参数组。
+    
 
 
 
