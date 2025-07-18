@@ -89,7 +89,7 @@ public class GenerateTemplate {
         //model.DataModel
         //ftl文件路径
         inputFilePath = inputResourcePath + File.separator + "templates/java/model/DataModel.java.ftl";//小心拼写templates 加s
-        outputFilePath = outputBaseJavaPackagePath + "/model/DataModel.java";//输出路径+自定义输出文件名
+        outputFilePath = outputBaseJavaPackagePath + "/com.yuanmao9527.maker/template/model/DataModel.java";//输出路径+自定义输出文件名
         DynamicGenerator.doGenerate(inputFilePath,outputFilePath, meta); // 动态文件生成
 
         //cli.command.ConfigCommand
